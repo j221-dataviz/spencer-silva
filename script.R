@@ -1,3 +1,4 @@
+# load required packaged
 library(dplyr)
 library(ggplot2)
 library(readr)
@@ -6,16 +7,129 @@ library(gganimate)
 library(tidyr) # this has function separate to separate e.g. first and last name
 library(forcats)
 
+#home runs by year
+
+# create empty data frame to hold data
+hr_tracker <- data_frame()
+
+# list files in hr_tracker folder
+files <- list.files("hr_tracker")
+
+# loop to read in each file, convert Date form text to standard date format, appead to data frame
+for (f in files) {
+  print(f)
+  tmp <- read_csv(paste0("hr_tracker/",f)) %>%
+    mutate(Date = as.Date(Date, format = "%m/%d/%y"))
+  names(tmp) <- c("Date","Video","Path","Hitter","Hitter_Team","Pitcher","Pitcher_Team","INN","Ballpark","Type_Luck","True_Dist","Speed_Off_Bat","Elev_Angle","Horiz_Angle","Apex","N_Parks")
+  hr_tracker <- bind_rows(hr_tracker,tmp)
+}
+# remove the temporary frame
+rm(tmp)
+
+# write out as csv
+write_csv(hr_tracker, "data/hr_tracker.csv", na="")
+
+# import data for analysis
+hitters <- read_csv("data/hitters_standard_1985_2017.csv")
+hr_tracker <- read_csv("data/hr_tracker.csv")
+
+## new variables in "hitters" = "batted_balls" and "hr_per_bb"
+hitters <- hitters %>% 
+  mutate(batted_balls = (AB-SO),
+         hr_per_bb=HR/batted_balls)
+
+# clean to remove any NaN from division by zero
+hitters[hitters == "NaN"] <- 0
+
+# filter for qualified hitters
+qual_hitters <- hitters %>%
+  filter(PA >= 350)
+
+# MLB home runs per batted ball, by season
+mlb_hr_per_100bb <- hitters %>%
+  group_by(Season) %>%
+  summarise(hr_per_100bb=sum(HR)/sum(batted_balls)*100)
+
+ggplot(mlb_hr_per_100bb, aes(x=Season, y=hr_per_100bb)) +
+  theme_minimal() +
+  ylab("Home runs per 100 batted balls") + 
+  scale_y_continuous(limits = c(0,5)) +
+  geom_rect(xmin = 1991, 
+            xmax = 2004,
+            ymin = 0, 
+            ymax = 5, 
+            fill="gray95",
+            alpha = 0.5) +
+  geom_point() +
+  geom_line() +
+  annotate("text", 
+           x = 1997, 
+           y = 4.7, 
+           label = "Steroid era",
+           family = "Helvetica",
+           size = 5,
+           color = "gray",
+           size = 5)
+
+# group qualified hitters into categories by numbe of HRs per year
+
+breaks <- c(0,11,21,31,41,51,80)
+
+qual_hitters <- qual_hitters %>%
+  mutate(hr_bin = cut(HR, breaks, include.lowest = TRUE))
+
+levels(qual_hitters$hr_bin) <- c("0-9","10-19","20-29","30-39","40-49","51+")
+
+hr_summary <- qual_hitters %>%
+  group_by(Season, hr_bin) %>%
+  summarize(count = n()) %>%
+  filter(Season >= 1995)
+
+ggplot(hr_summary, aes(x=Season, fill=hr_bin)) +
+  geom_histogram()
+
+hr_animate <- ggplot(qual_hitters, aes(x=HR, fill=hr_bin, frame=Season)) +
+  geom_histogram(binwidth=10, color="#888888", alpha = 0.75) +
+  scale_color_brewer(palette = "Set1", name = "") +
+  geom_density() +
+  # facet_wrap(~Season) +
+  theme_minimal(base_size = 12, base_family = "Georgia") +
+  ylab("Players in each home run bin") +
+  xlab("Home Run totals of players with 350+ plate appearances") +
+  ggtitle("Players in each home run category (1995-2017)")
+
+gganimate(hr_animate)
+
+
+
+
+
+
+
+############################################
+
+
+
+
+
+
+
+
+
+
+
+
+# stacked area chart 
+
+ggplot(hr_tracker, aes(x=Speed_off_Bat, y=Date)) +
+  geom_dotplot()
+
 #import data
 
 hitters <- read_csv("hitters_updated.csv")
-
 hr_tracker <- read_csv("hr_tracker.csv")
-
 hr_summary <- read_csv("hr_summary.csv")
-  
 qual_hitters <- read_csv("qual_hitters.csv")
-  
 qual_hitters_2017 <- read_csv("qual_hitters_2017.csv")
   
   
@@ -53,32 +167,7 @@ ggplot(qual_hitters, aes(x=HR, y=Season, group=Season)) +
   scale_x_continuous(limits=c(10, 40)) +
   scale_y_reverse()
 
-#home runs by year
 
-# create empty data frame to hold data
-hr_tracker <- data_frame()
-
-# list files in hr_tracker folder
-files <- list.files("hr_tracker")
-
-# loop to read in each file, convert Date form text to standard date format, appead to data frame
-for (f in files) {
-  print(f)
-  tmp <- read_csv(paste0("hr_tracker/",f)) %>%
-    mutate(Date = as.Date(Date, format = "%m/%d/%y"))
-  names(tmp) <- c("Date","Video","Path","Hitter","Hitter_Team","Pitcher","Pitcher_Team","INN","Ballpark","Type_Luck","True_Dist","Speed_Off_Bat","Elev_Angle","Horiz_Angle","Apex","N_Parks")
-  hr_tracker <- bind_rows(hr_tracker,tmp)
-}
-# remove the temporary frame
-rm(tmp)
-
-# write out as csv
-write_csv(hr_tracker, "hr_tracker.csv", na="")
-
-# stacked area chart 
-
-ggplot(hr_tracker, aes(x=Speed_off_Bat, y=Date)) +
-  geom_dotplot()
   
 # Look at same charts as before with hr_per_bb instead
 
