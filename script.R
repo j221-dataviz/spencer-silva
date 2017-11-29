@@ -226,6 +226,12 @@ system("convert graphs/bin_dot_line.gif \\( +clone -set delay 300 \\) +swap +del
 system("convert graphs/bin_dot_line.gif \\( -clone 0  -set delay 300 \\) -swap 0,-1 +delete graphs/bin_dot_line.gif")
 
 
+## messing with hr_tracker data
+
+
+
+
+
 ############################################
 
 
