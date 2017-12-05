@@ -141,6 +141,88 @@ ggplot(qual_hitters1017, aes(x=Season, y=HR, group=Season)) +
   ylab("Home runs per player") +
   xlab("")
 
+### bringing in hr_tracker data
 
+#import data
+
+hr_tracker <- read_csv("data/hr_trackerclean.csv")
+
+cats <- c("season","mean_dist","median_dist","mean_speed", "med_speed")
+
+season <- c(2010,2011,2012,2013,2014,2015,2016,2017)
+  
+mean_dist <- hr_tracker %>%
+  group_by(season) %>%
+  summarize(mean = mean(true_dist, na.rm = TRUE))
+
+med_dist <- hr_tracker %>%
+  group_by(season) %>%
+  summarize(median = median(true_dist, na.rm = TRUE))
+
+mean_speed <- hr_tracker %>%
+  group_by(season) %>%
+  summarize(mean = mean(speed_off_bat, na.rm = TRUE))
+  
+med_speed <- hr_tracker %>%
+  group_by(season) %>%
+  summarize(median = median(speed_off_bat, na.rm = TRUE))
+
+type <- c("je","nd","pl")
+
+type_luck <- hr_tracker %>%
+  group_by(season) %>%
+  summarize(count = n()) %>%
+  
+typeluck2010 <- hr_tracker %>%
+  group_by(type_luck) %>%
+  filter(season==2010) %>%
+  summarise(count = n())
+  
+typeluck2011 <- hr_tracker %>%
+  group_by(type_luck) %>%
+  filter(season==2011) %>%
+  summarise(count = n())
+
+typeluck2012 <- hr_tracker %>%
+  group_by(type_luck) %>%
+  filter(season==2012) %>%
+  summarise(count = n())
+
+typeluck2013 <- hr_tracker %>%
+  group_by(type_luck) %>%
+  filter(season==2013) %>%
+  summarise(count = n())
+
+typeluck2014 <- hr_tracker %>%
+  group_by(type_luck) %>%
+  filter(season==2014) %>%
+  summarise(count = n())
+
+typeluck2015 <- hr_tracker %>%
+  group_by(type_luck) %>%
+  filter(season==2015) %>%
+  summarise(count = n())
+
+typeluck2016 <- hr_tracker %>%
+  group_by(type_luck) %>%
+  filter(season==2016) %>%
+  summarise(count = n())
+
+typeluck2017 <- hr_tracker %>%
+  group_by(type_luck) %>%
+  filter(season==2017) %>%
+  summarise(count = n())
+
+
+
+  
+  
+
+
+
+
+
+
+  
 
 

@@ -228,9 +228,21 @@ system("convert graphs/bin_dot_line.gif \\( -clone 0  -set delay 300 \\) -swap 0
 
 ## messing with hr_tracker data
 
+hr_trackerclean <- read_csv("hr_tracker_clean.csv")
 
+## filter hr_tracker into seasons
 
+type.by.season <- format(hr_trackerclean$date, "%Y")
 
+hr_trackerclean <- hr_trackerclean %>%
+  mutate(season=type.by.season)
+  
+ggplot(hr_trackerclean,aes(x=season,y=nrow(hr_trackerclean),fill=type_luck)) +
+  geom_bar(stat="identity") 
+
+#write new csv with "season" column
+
+write_csv(hr_trackerclean, "hr_trackerclean.csv", na="")
 
 ############################################
 
