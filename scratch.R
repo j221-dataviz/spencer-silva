@@ -59,17 +59,18 @@ saveWidget(boxplot_interactive, "boxplot_interactive.html", selfcontained = TRUE
 qual_hitters1017 <- qual_hitters %>%
   filter(Season>=2010)
 
-
+qual_hitters_96 <- qual_hitters %>%
+  filter(Season>=1996)
 
 # violin and jitter plots
 
 # 1995 onwards
 
 # jitter
-ggplot(qual_hitters, aes(x=Season, y=HR, group=Season)) +
+ggplot(qual_hitters_96, aes(x=Season, y=HR, group=Season)) +
   geom_jitter(shape = 21, colour="black", size=2, stroke=0.1, width=0.3, aes(group=hr_bin, fill=hr_bin)) +
   scale_fill_brewer(palette = "Blues", guide=FALSE) +
-  scale_x_continuous(breaks = c(1995:2017)) +
+  scale_x_continuous(breaks = c(1996:2017)) +
   scale_y_continuous(breaks = c(0,10,20,30,40,50,60,70)) +
   scale_color_brewer(palette = "Set1", name = "") +
   theme_minimal(base_size = 20, base_family = "Georgia") +
@@ -80,14 +81,14 @@ ggplot(qual_hitters, aes(x=Season, y=HR, group=Season)) +
   coord_flip()
 
 # combined
-ggplot(qual_hitters, aes(x=Season, y=HR, group=Season)) +
+ggplot(qual_hitters_96, aes(x=Season, y=HR, group=Season)) +
   geom_violin(fill = "#CCD6F5", color = "#3366FF", size = 0.2) +
-  geom_jitter(shape = 21, colour="black", size=2, stroke=0.1, width=0.3, alpha = 0.5, aes(group=hr_bin, fill=hr_bin)) +
+  geom_jitter(shape = 21, colour="black", size=2, stroke=0.4, width=0.3, alpha = 0.5, aes(group=hr_bin, fill=hr_bin)) +
   scale_fill_brewer(palette = "Blues", guide=FALSE) +
-  scale_x_continuous(breaks = c(1995:2017)) +
+  scale_x_continuous(breaks = c(1996:2017)) +
   scale_y_continuous(breaks = c(0,10,20,30,40,50,60,70)) +
   scale_color_brewer(palette = "Set1", name = "") +
-  theme_minimal(base_size = 20, base_family = "Georgia") +
+  theme_minimal(base_size = 30, base_family = "Trebuchet MS") +
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.y = element_blank()) +
   ylab("Home runs per player") +
@@ -135,13 +136,13 @@ ggplot(qual_hitters1017, aes(x=Season, y=HR, group=Season)) +
 
 # combined
 ggplot(qual_hitters1017, aes(x=Season, y=HR, group=Season)) +
-  geom_violin(fill = "#CCD6F5", color = "#3366FF", size = 0.2) +
-  geom_jitter(shape = 21, colour="black", size=2, stroke=0.1, width=0.3, alpha = 0.5, aes(group=hr_bin, fill=hr_bin)) +
+  geom_violin(fill = "#CCD6F5", color = "#3366FF", size = 1) +
+  geom_jitter(shape = 21, colour="black", size=10, stroke=0.5, width=0.3, alpha = 0.5, aes(group=hr_bin, fill=hr_bin)) +
   scale_fill_brewer(palette = "Blues", guide=FALSE) +
   scale_x_continuous(breaks = c(2010:2017)) +
   scale_y_continuous(breaks = c(0,10,20,30,40,50,60,70)) +
   scale_color_brewer(palette = "Set1", name = "") +
-  theme_minimal(base_size = 20, base_family = "Georgia") +
+  theme_minimal(base_size = 36, base_family = "Trebuchet MS") +
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank()) +
   ylab("Home runs per player") +

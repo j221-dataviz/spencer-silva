@@ -142,30 +142,33 @@ system("convert graphs/hr_animation.gif \\( +clone -set delay 300 \\) +swap +del
 hr_summary10 <- hr_summary %>%
   filter(Season>=2010)
 
+seasons <- c(2010:2017)
+
 # dot-and-line chart by bin
 ggplot(hr_summary10, aes(x=Season, y=count)) +
-  theme_minimal(base_size = 24, base_family = "Trebuchet MS") +
+  theme_minimal(base_size = 36, base_family = "Trebuchet MS") +
   theme(panel.grid = element_blank()) +
-  ylab("Number of players") + 
+  ylab("Number of players 350+ PA") + 
   scale_y_continuous(breaks = seq(0, 110, by=10)) +
+  scale_x_continuous(breaks = seasons) +
   geom_rect(xmin = 2015, 
             xmax = 2017,
             ymin = 0, 
             ymax = 120, 
             fill = "#eff3ff") +
   geom_line(aes(group=hr_bin), color="gray", size=1.2) +
-  geom_point(shape = 21, colour="black", size=8, stroke=0.2, aes(group=hr_bin, fill=hr_bin)) +
+  geom_point(shape = 21, colour="black", size=12, stroke=0.2, aes(group=hr_bin, fill=hr_bin)) +
   scale_fill_brewer(palette = "Blues", name="Home runs") +
   annotate("text", 
            x = 2016, 
            y = 115, 
            label = "Juiced Ball?",
            family = "Trebuchet MS",
-           size = 10,
+           size = 12,
            color = "#08306b",
            size = 5) +
   geom_hline(yintercept=seq(0, 100, by=10), color = "gray", size = 0.1) +
-  geom_vline(xintercept=seq(2010,2015, by=5), color = "gray", size = 0.1) 
+  geom_vline(xintercept=seq(2010,2017, by=1), color = "gray", size = 0.1) 
   
 
 scale_x_continuous(breaks = seq(2010, 2017, by=1)) +
@@ -176,16 +179,6 @@ ggplot(subset(hr_summary10, hr_bin=="0-10"|hr_bin=="21-30"), aes(x=Season, y=cou
   theme(panel.grid = element_blank()) +
   ylab("Number of players") + 
   scale_y_continuous(breaks = seq(0, 110, by=10)) +
-  geom_rect(xmin = 1991, 
-            xmax = 2004,
-            ymin = 0, 
-            ymax = 120, 
-            fill="#f8f8f8") +
-  geom_rect(xmin = 2015, 
-            xmax = 2017,
-            ymin = 0, 
-            ymax = 120, 
-            fill = "#eff3ff") +
   geom_line(aes(group=hr_bin), color="gray", size=0.2) +
   geom_point(shape = 21, colour="black", size=2, stroke=0.2, aes(group=hr_bin, fill=hr_bin)) +
   scale_fill_manual(values=c("#9ecae1","#6baed6"), name="Home runs") +
