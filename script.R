@@ -52,11 +52,11 @@ mlb_hr_per_100bb <- hitters %>%
 
 # basic dot-and-line chart, to set the scene
 ggplot(mlb_hr_per_100bb, aes(x=Season, y=hr_per_100bb)) +
-  theme_minimal(base_size = 16, base_family = "Georgia") +
+  theme_minimal(base_size = 36, base_family = "Trebuchet MS") +
   theme(panel.grid = element_blank()) +
   ylab("Home runs per 100 batted balls") + 
   scale_y_continuous(limits = c(0,5)) +
-  scale_x_continuous(breaks = seq(1985, 2015, by=5)) +
+  scale_x_continuous(breaks = seq(1985, 2017, by=2)) +
   geom_rect(xmin = 1991, 
             xmax = 2004,
             ymin = 0, 
@@ -69,22 +69,22 @@ ggplot(mlb_hr_per_100bb, aes(x=Season, y=hr_per_100bb)) +
             ymax = 5, 
             fill="#eff3ff",
             alpha = 0.1) +
-  geom_line(color="#08306b") +
-  geom_point(color="#08306b") +
+  geom_line(size=1, color="gray") +
+  geom_point(size=12, shape=21,fill= "#08306b") +
   annotate("text", 
            x = 1997.5, 
            y = 0.3, 
-           label = "Steroid era",
-           family = "Georgia",
-           size = 6,
+           label = "Steroid Era",
+           family = "Trebuchet MS",
+           size = 16,
            color = "#808080",
            size = 5) +
   annotate("text", 
            x = 2016, 
            y = 0.3, 
            label = "?",
-           family = "Georgia",
-           size = 6,
+           family = "Trebuchet MS",
+           size = 16,
            color = "#08306b",
            size = 5) +
   geom_hline(yintercept=seq(0, 5, by=1), color = "gray", size = 0.1) +
@@ -137,52 +137,45 @@ gganimate(hr_animate, "graphs/hr_animation.gif", ani.width = 750, ani.height = 4
 system("convert graphs/hr_animation.gif \\( +clone -set delay 300 \\) +swap +delete graphs/hr_animation.gif")
 
 
+### 2010-2017 HR_SUMMARY
+
+hr_summary10 <- hr_summary %>%
+  filter(Season>=2010)
+
 # dot-and-line chart by bin
-ggplot(hr_summary, aes(x=Season, y=count)) +
-  theme_minimal(base_size = 16, base_family = "Georgia") +
+ggplot(hr_summary10, aes(x=Season, y=count)) +
+  theme_minimal(base_size = 24, base_family = "Trebuchet MS") +
   theme(panel.grid = element_blank()) +
   ylab("Number of players") + 
-  scale_y_continuous(breaks = seq(0, 120, by=20)) +
-  scale_x_continuous(breaks = seq(1985, 2015, by=5)) +
-  geom_rect(xmin = 1991, 
-            xmax = 2004,
-            ymin = 0, 
-            ymax = 120, 
-            fill="#f8f8f8") +
+  scale_y_continuous(breaks = seq(0, 110, by=10)) +
   geom_rect(xmin = 2015, 
             xmax = 2017,
             ymin = 0, 
             ymax = 120, 
             fill = "#eff3ff") +
-  geom_line(aes(group=hr_bin), color="gray", size=0.2) +
-  geom_point(shape = 21, colour="black", size=2, stroke=0.2, aes(group=hr_bin, fill=hr_bin)) +
+  geom_line(aes(group=hr_bin), color="gray", size=1.2) +
+  geom_point(shape = 21, colour="black", size=8, stroke=0.2, aes(group=hr_bin, fill=hr_bin)) +
   scale_fill_brewer(palette = "Blues", name="Home runs") +
-  annotate("text", 
-           x = 1999, 
-           y = 115, 
-           label = "Steroid era",
-           family = "Georgia",
-           size = 6,
-           color = "#808080",
-           size = 5) +
   annotate("text", 
            x = 2016, 
            y = 115, 
-           label = "?",
-           family = "Georgia",
-           size = 6,
+           label = "Juiced Ball?",
+           family = "Trebuchet MS",
+           size = 10,
            color = "#08306b",
            size = 5) +
   geom_hline(yintercept=seq(0, 100, by=10), color = "gray", size = 0.1) +
-  geom_vline(xintercept=seq(1995,2015, by=5), color = "gray", size = 0.1)
+  geom_vline(xintercept=seq(2010,2015, by=5), color = "gray", size = 0.1) 
+  
+
+scale_x_continuous(breaks = seq(2010, 2017, by=1)) +
 
 # filtered version of that chart, to show increase for particular bins
-ggplot(subset(hr_summary, hr_bin=="21-30"|hr_bin=="31-40"), aes(x=Season, y=count)) +
-  theme_minimal(base_size = 16, base_family = "Georgia") +
+ggplot(subset(hr_summary10, hr_bin=="0-10"|hr_bin=="21-30"), aes(x=Season, y=count)) +
+  theme_minimal(base_size = 24, base_family = "Trebuchet MS") +
   theme(panel.grid = element_blank()) +
   ylab("Number of players") + 
-  scale_y_continuous(breaks = seq(0, 120, by=20)) +
-  scale_x_continuous(breaks = seq(1985, 2015, by=5)) +
+  scale_y_continuous(breaks = seq(0, 110, by=10)) +
   geom_rect(xmin = 1991, 
             xmax = 2004,
             ymin = 0, 
@@ -197,23 +190,17 @@ ggplot(subset(hr_summary, hr_bin=="21-30"|hr_bin=="31-40"), aes(x=Season, y=coun
   geom_point(shape = 21, colour="black", size=2, stroke=0.2, aes(group=hr_bin, fill=hr_bin)) +
   scale_fill_manual(values=c("#9ecae1","#6baed6"), name="Home runs") +
   annotate("text", 
-           x = 1999, 
-           y = 115, 
-           label = "Steroid era",
-           family = "Georgia",
-           size = 6,
-           color = "#808080",
-           size = 5) +
-  annotate("text", 
            x = 2016, 
            y = 115, 
-           label = "?",
-           family = "Georgia",
+           label = 
+           family = "Trebuchet MS",
            size = 6,
            color = "#08306b",
            size = 5) +
   geom_hline(yintercept=seq(0, 100, by=10), color = "gray", size = 0.1) +
-  geom_vline(xintercept=seq(1995,2015, by=5), color = "gray", size = 0.1)
+  geom_vline(xintercept=seq(2010,2015, by=1), color = "gray", size = 0.1)
+
+scale_x_continuous(breaks = seq(1985, 2015, by=5)) +
 
 # asfter both charts saved to temp_charts folder, this makes a GIF
 
