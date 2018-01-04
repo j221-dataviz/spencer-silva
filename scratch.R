@@ -21,7 +21,7 @@ qual_hitters2017 <- read_csv("data/qual_hitters_2017.csv")
 
 ## Stripchart for all data
 
-stripchart(qual_hitters$HR, method = "jitter") %>%
+stripchart(qual_hitters$HR, method = "jitter")
   
 # box and whisker
 
@@ -135,16 +135,19 @@ ggplot(qual_hitters1017, aes(x=Season, y=HR, group=Season)) +
   xlab("")
 
 # combined
-ggplot(qual_hitters1017, aes(x=Season, y=HR, group=Season)) +
+ggplot(qual_hitters1017, aes(x=Season, y=HR, group=Season, label=Name)) +
   geom_violin(fill = "#CCD6F5", color = "#3366FF", size = 1) +
   geom_jitter(shape = 21, colour="black", size=10, stroke=0.5, width=0.3, alpha = 0.5, aes(group=hr_bin, fill=hr_bin)) +
+  geom_text(size=9, aes(label=ifelse(HR>50,as.character(Name),'')),hjust=0.5,vjust=-1.25) +
   scale_fill_brewer(palette = "Blues", guide=FALSE) +
   scale_x_continuous(breaks = c(2010:2017)) +
   scale_y_continuous(breaks = c(0,10,20,30,40,50,60,70)) +
   scale_color_brewer(palette = "Set1", name = "") +
-  theme_minimal(base_size = 36, base_family = "Trebuchet MS") +
+  theme_minimal(base_size = 55, base_family = "Trebuchet MS") +
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank()) +
+  theme(axis.title.x = element_text(size=36)) +
+  theme(strip.text = element_text(size = 24, family = "Trebuchet MS", color = "#E65523")) +
   ylab("Home runs per player") +
   xlab("")
 
@@ -168,16 +171,16 @@ ggplot(qual_hitters1017, aes(x=Season, y=HR, group=Season)) +
 
 # import data
 
-leaguestats <- read_csv("league_stats.csv")
+leaguestats <- read_csv("data/league_stats.csv")
 
 ggplot(leaguestats, aes(x=Season, y=(HR_BB*100))) +
   geom_line() +
   geom_point(size=12, shape=21, fill= "#08306b") +
-  theme_minimal(base_size = 45, base_family = "Trebuchet MS") +
+  theme_minimal(base_size = 36, base_family = "Trebuchet MS") +
   theme(panel.grid = element_blank()) +
   ylab("Home runs per 100 batted balls") + 
   scale_y_continuous(limits = c(0,5)) +
-  scale_x_continuous(breaks = seq(1910, 2015, by=5)) +
+  scale_x_continuous(breaks = seq(1910, 2015, by=10)) +
   geom_hline(yintercept=seq(0, 5, by=1), color = "gray", size = 0.1) +
   geom_vline(xintercept=seq(1910,2015, by=20), color = "gray", size = 0.1)
 

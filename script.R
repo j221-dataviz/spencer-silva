@@ -76,7 +76,7 @@ ggplot(mlb_hr_per_100bb, aes(x=Season, y=hr_per_100bb)) +
            y = 0.3, 
            label = "Steroid Era",
            family = "Trebuchet MS",
-           size = 16,
+           size = 24,
            color = "#808080",
            size = 5) +
   annotate("text", 
@@ -84,7 +84,7 @@ ggplot(mlb_hr_per_100bb, aes(x=Season, y=hr_per_100bb)) +
            y = 0.3, 
            label = "?",
            family = "Trebuchet MS",
-           size = 16,
+           size = 24,
            color = "#08306b",
            size = 5) +
   geom_hline(yintercept=seq(0, 5, by=1), color = "gray", size = 0.1) +
@@ -175,7 +175,7 @@ scale_x_continuous(breaks = seq(2010, 2017, by=1)) +
 
 # filtered version of that chart, to show increase for particular bins
 ggplot(subset(hr_summary10, hr_bin=="0-10"|hr_bin=="21-30"), aes(x=Season, y=count)) +
-  theme_minimal(base_size = 24, base_family = "Trebuchet MS") +
+  theme_minimal(base_size = 36, base_family = "Trebuchet MS") +
   theme(panel.grid = element_blank()) +
   ylab("Number of players") + 
   scale_y_continuous(breaks = seq(0, 110, by=10)) +
