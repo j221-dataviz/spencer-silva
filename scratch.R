@@ -143,7 +143,7 @@ ggplot(qual_hitters1017, aes(x=Season, y=HR, group=Season, label=Name)) +
   scale_x_continuous(breaks = c(2010:2017)) +
   scale_y_continuous(breaks = c(0,10,20,30,40,50,60,70)) +
   scale_color_brewer(palette = "Set1", name = "") +
-  theme_minimal(base_size = 55, base_family = "Trebuchet MS") +
+  theme_minimal(base_size = 36, base_family = "Trebuchet MS") +
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank()) +
   theme(axis.title.x = element_text(size=36)) +
